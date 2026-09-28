@@ -1,0 +1,17 @@
+# secrets
+.env
+
+# python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# chroma persistent store (regenerate with scripts/ingest.py)
+chroma_db/
+
+# streamlit
+.streamlit/secrets.toml
+
+# os
+.DS_Store

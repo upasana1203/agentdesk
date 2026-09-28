@@ -1,0 +1,29 @@
+New Employee Onboarding Guide
+
+Week 1: Setup
+On your first day, IT will provide your laptop and accounts (email, Slack,
+GitHub, and the internal wiki). Complete the mandatory security training
+module within your first 3 days -- it takes about 45 minutes.
+
+Week 1: Meet your team
+Your manager will schedule 1:1 intro meetings with your immediate team and
+key cross-functional partners during your first week. You'll also be
+assigned an onboarding buddy, a peer (not your manager) you can ask
+"no question is too small" questions.
+
+Week 2-4: Ramp-up projects
+New engineers are typically assigned a small, well-scoped starter project
+in their first two weeks, meant to touch the main systems they'll work
+with without being on the critical path. Non-engineering roles follow an
+equivalent shadowing and small-deliverable ramp-up plan set by their
+manager.
+
+30/60/90 day check-ins
+HR schedules a 30-day, 60-day, and 90-day check-in with you and your
+manager to discuss how ramp-up is going, address blockers, and set goals
+for the next period. These are separate from performance reviews.
+
+Benefits enrollment
+You have 30 days from your start date to enroll in health, dental, and
+vision benefits. After 30 days, you'll need to wait for the next open
+enrollment period unless you have a qualifying life event.

@@ -1,0 +1,17 @@
+# Pinned below 1.0: LangChain 1.0 moved AgentExecutor / create_tool_calling_agent
+# out of langchain.agents into a separate langchain-classic package. Staying
+# on the 0.3.x line keeps this project's imports working as written.
+langchain>=0.3.0,<1.0
+langchain-community>=0.3.0,<1.0
+langchain-core>=0.3.0,<1.0
+langchain-text-splitters>=0.3.0,<1.0
+langchain-google-genai>=2.0.0,<3.0.0
+langchain-chroma>=0.1.4,<1.0
+langchain-huggingface>=0.1.0,<1.0
+chromadb>=0.5.0
+sentence-transformers>=3.0.0
+streamlit>=1.38.0
+python-dotenv>=1.0.1
+pandas>=2.2.0
+
+
