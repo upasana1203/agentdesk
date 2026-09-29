@@ -24,6 +24,7 @@ import os
 from dotenv import load_dotenv
 from langchain_classic.agents import AgentExecutor, create_tool_calling_agent
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
+from langchain_core.runnables import RunnableLambda
 from langchain_core.runnables.history import RunnableWithMessageHistory
 from langchain_google_genai import ChatGoogleGenerativeAI
 
@@ -49,8 +50,30 @@ question is about the product catalog. If a tool returns no useful result,
 say so plainly instead of making something up."""
 
 
+def _content_to_text(content) -> str:
+    """Gemini 3.x can return the answer as a list of content blocks (each with
+    a thought signature) instead of a plain string. Flatten it to text so the
+    chat history only ever stores clean strings."""
+    if isinstance(content, str):
+        return content
+    if isinstance(content, list):
+        parts = []
+        for block in content:
+            if isinstance(block, str):
+                parts.append(block)
+            elif isinstance(block, dict) and block.get("type", "text") == "text":
+                parts.append(block.get("text", ""))
+        return "".join(parts)
+    return str(content)
+
+
+def _clean_output(result: dict) -> dict:
+    result["output"] = _content_to_text(result.get("output", ""))
+    return result
+
+
 def build_agent_executor() -> AgentExecutor:
-    api_key = os.getenv("GOOGLE_API_KEY")
+    api_key = (os.getenv("GOOGLE_API_KEY") or "").strip().strip('"')
     if not api_key:
         raise RuntimeError(
             "GOOGLE_API_KEY is not set. Copy .env.example to .env and add your key."
@@ -60,9 +83,8 @@ def build_agent_executor() -> AgentExecutor:
     # that page for the current recommended flash/pro model if this one has
     # been deprecated by the time you run this.
     llm = ChatGoogleGenerativeAI(
-        model=os.getenv("GEMINI_MODEL", "gemini-2.5-flash"),
+        model=os.getenv("GEMINI_MODEL", "gemini-3.5-flash"),
         google_api_key=api_key,
-        temperature=0.3,
     )
 
     tools = get_all_tools()
@@ -91,7 +113,9 @@ def build_agent_executor() -> AgentExecutor:
 def build_agent_with_memory() -> RunnableWithMessageHistory:
     """The object app.py actually talks to: an agent executor wrapped so
     that chat_history is automatically loaded/saved per session_id."""
-    executor = build_agent_executor()
+    # Clean the output BEFORE the history wrapper saves it, otherwise the raw
+    # content blocks get stored as "messages" and the next turn crashes.
+    executor = build_agent_executor() | RunnableLambda(_clean_output)
     return RunnableWithMessageHistory(
         executor,
         get_session_history,
