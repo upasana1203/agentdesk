@@ -136,6 +136,10 @@ if user_input:
                     config={"configurable": {"session_id": st.session_state.session_id}},
                 )
                 answer = result.get("output", "Sorry, I didn't get a response.")
+                if isinstance(answer, list):
+                    answer = "".join(
+                        b.get("text", "") if isinstance(b, dict) else str(b) for b in answer
+                    )
 
                 tool_trace = []
                 for action, observation in result.get("intermediate_steps", []):
